@@ -20,6 +20,30 @@ class Channel:
         self.video_count = self.channel['items'][0]['statistics']['videoCount']
         self.view_count = self.channel['items'][0]['statistics']['viewCount']
 
+    def __str__(self):
+        return f'{self.title} ({self.url})'
+
+    def __add__(self, other):
+        return int(self.subscribers) + int(other.subscribers)
+
+    def __sub__(self, other):
+        return int(self.subscribers) - int(other.subscribers)
+
+    def __lt__(self, other):
+        return int(self.subscribers) < int(other.subscribers)
+
+    def __le__(self, other):
+        return int(self.subscribers) <= int(other.subscribers)
+
+    def __gt__(self, other):
+        return int(self.subscribers) > int(other.subscribers)
+
+    def __ge__(self, other):
+        return int(self.subscribers) >= int(other.subscribers)
+
+    def __eq__(self, other):
+        return int(self.subscribers) == int(other.subscribers)
+
     @property
     def channel_id(self):
         return self.__channel_id
@@ -29,13 +53,12 @@ class Channel:
         print(json.dumps(self.channel, indent=2, ensure_ascii=False))
 
     def to_json(self, name):
-        json_str = json.dumps({'id': self.__channel_id, 'Title': self.title,
-                               'Description': self.description, 'URL': self.url,
-                               'Subscribers': self.subscribers,
-                               'Video count': self.video_count,
-                               'View count': self.view_count}, indent=2, ensure_ascii=False)
         with open(name, 'w', encoding='utf-8') as file:
-            file.write(json_str)
+            json.dump({'id': self.__channel_id, 'Title': self.title,
+                       'Description': self.description, 'URL': self.url,
+                       'Subscribers': self.subscribers,
+                       'Video count': self.video_count,
+                       'View count': self.view_count}, file)
 
     @classmethod
     def get_service(cls):
